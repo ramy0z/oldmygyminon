@@ -1,0 +1,115 @@
+<div class="add-form">
+	<form method="post" action="/admin/invitations">
+		<h2 class="form-heading">Invite User</h2>
+    <div class="form-group">
+      <label for="">Email </label>
+      <input type="email" name="email"  value="">
+    </div>
+		<div class="form-group">
+      <label for="">Select Branch </label>
+		<select id="branch" name="invitation_key">
+				<option value="null">Main Club</option>
+			<% var i=1; Object.keys(branch).forEach(function(key) {
+				if(i==1){ %>
+					<option value="branch">All Branch</option>
+					<option value="units">All Units</option>
+				<% } %>
+					<option  value="<%- branch[key].pub_key %>"><%- branch[key].name %></option>
+			<% i++; });	 %>
+			</select>
+		</div>
+		<div class="form-group">
+			<input type="submit" class="form-control" >
+			<input type="button" class="form-control cancel" value="Cancel">
+
+		</div>
+	</form>
+</div>
+<div id="main">
+  <div class="add show-form">
+    <sapn><i class="fa fa-plus-square"></i></sapn>
+  </div>
+				<ol class="breadcrumb">
+						<li><a href="/admin">Home</a></li>
+						<li class="active">All Users</li>
+				</ol>
+				<!-- //breadcrumb-->
+
+				<div id="content">
+
+						<div class="row">
+
+								<div class="col-lg-12">
+
+										<section class="panel">
+												<header class="panel-heading">
+														<h2><strong>Table</strong> responsive </h2>
+														<label class="color">Bootstrap Class<em><strong> table-responsive </strong></em></label>
+                            <% if(code !== ''){ %>
+                              <h4 style="text-align:center;color:red;"><%- code %></h4>
+                            <% } %>
+                        </header>
+												<div class="panel-tools fully color" align="right"  data-toolscolor="#6CC3A0">
+														<ul class="tooltip-area">
+																<li><a href="javascript:void(0)" class="btn btn-collapse" title="Collapse"><i class="fa fa-sort-amount-asc"></i></a></li>
+																<li><a href="javascript:void(0)" class="btn btn-reload"  title="Reload"><i class="fa fa-retweet"></i></a></li>
+																<li><a href="javascript:void(0)" class="btn btn-close" title="Close"><i class="fa fa-times"></i></a></li>
+														</ul>
+												</div>
+												<div class="panel-body">
+																<div class="table-responsive">
+																<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped">
+																		<thead>
+																				<tr>
+																						<th>No.</th>
+																						<th>Email</th>
+																						<th>Date</th>
+																						<th width="30%">Action</th>
+																				</tr>
+																		</thead>
+																		<tbody align="center">
+
+                                      <%
+                                      if(invitations){
+                                      var i=1;
+                                      for (var key in invitations) {
+                                        if (invitations.hasOwnProperty(key)) {
+                                          var str = invitations[key].createdat.split('T');
+                                         %>
+                                         <tr>
+                                          <td><%- i %></td>
+                                          <td> <%- invitations[key].to  %> </td>
+                                          <td> <%- str[0] %> </td>
+                                          <td>
+                                            <span class="tooltip-area">
+
+                                            <a href="/admin/resendinvitation/<%- invitations[key].to  %>" class="btn btn-default btn-sm" title="Resend"><i class="fa fa-refresh"></i></a>
+                                            <a href="/admin/deleteinvitation/<%- invitations[key]._id  %>"  class="btn btn-default btn-sm" title="Delete"><i class="fa fa-trash-o"></i></a>
+                                            </span>
+                                          </td>
+                                         </tr>
+                                      <%
+                                          }
+                                          i++;
+                                        }
+
+                                    }else { %>
+                                      <tr>
+                                       <td colspan="4">No Emails</td>
+                                     </tr>
+                                    <% } %>
+
+																		</tbody>
+																</table>
+																</div>
+												</div>
+										</section>
+								</div>
+
+						</div>
+						<!-- //content > row-->
+
+				</div>
+				<!-- //content-->
+		</div>
+		<!-- //main-->

@@ -1,0 +1,136 @@
+<div id="main">
+	<!-- Add Form -->
+	<div class="add-form">
+		<form method="post" action="/admin/privilidgetype">
+			<h2 class="form-heading">Add new user ..</h2>
+			<div class="form-group">
+				<label for="">Type name</label>
+				<input type="text" name="type" class="form-control"  placeholder="Ex: Accountant">
+			</div>
+
+				<div class="form-group">
+				<label for="">All privilidge</label><br >
+				<ul>
+				<% var i=1;
+				Object.keys(allPrivilidge).forEach(function(key1) { %>
+					<li style="margin:10px;">
+						<input type="checkbox" id="selectall<%- i %>" onclick="selectall('selectall<%- i %>')" class="allPrivilidgecheck" /> <%- key1 %> <ul style="margin-left: 10px;">
+					<% Object.keys(allPrivilidge[key1]).forEach(function(key) { %>
+						<li><input type="checkbox" onclick="selectone('selectall<%- i %>')" class="selectall<%- i %>" name="allPrivilidge" value="<%- allPrivilidge[key1][key] %>" />
+						<span><%- key %></span></ li>
+					<% }); %>
+					</ul></li>
+				<% i++; }); %>
+				</ul>
+			</div>
+			<div class="form-group">
+				<input type="submit" class="form-control" >
+				<input type="button" class="form-control cancel" value="Cancel">
+
+			</div>
+		</form>
+	</div>
+	<!-- End Add Form -->
+	<!-- EDIT Form -->
+	<div class="add-form-edit">
+		<form id="editform" method="post" action="">
+			<h2 class="form-heading">Add new user ..</h2>
+			<div class="form-group">
+				<label for="">Type name</label>
+				<input type="text" name="type" id="edittype" class="form-control"  placeholder="Ex: Accountant">
+			</div>
+
+				<div class="form-group">
+				<label for="">All privilidge</label><br >
+					<ul>
+					<% var i=1;
+					Object.keys(allPrivilidge).forEach(function(key1) { %>
+						<li style="margin:10px;">
+							<input type="checkbox" id="selectalll<%- i %>" onclick="selectall('selectalll<%- i %>')" class="allPrivilidgecheck" /> <%- key1 %> <ul style="margin-left: 10px;">
+						<% Object.keys(allPrivilidge[key1]).forEach(function(key) { %>
+							<li><input type="checkbox" onclick="selectone('selectalll<%- i %>')" class="allPrivilidgecheck selectalll<%- i %>" name="allPrivilidge" id="<%- allPrivilidge[key1][key] %>" value="<%- allPrivilidge[key1][key] %>" />
+							<span><%- key %></span></ li>
+						<% }); %>
+						</ul></li>
+					<% i++; }); %>
+					</ul>
+			</div>
+			<div class="form-group">
+				<input type="submit" class="form-control" >
+				<input type="button" class="form-control cancel-edit" value="Cancel">
+
+			</div>
+		</form>
+	</div>
+	<!-- End Edit Form -->
+		<div class="add show-form">
+			<sapn><i class="fa fa-plus-square"></i></sapn>
+		</div>
+
+				<ol class="breadcrumb">
+						<li><a href="/admin">Home</a></li>
+						<li class="active">Privilidge Types</li>
+				</ol>
+				<!-- //breadcrumb-->
+
+				<div id="content">
+
+						<div class="row">
+
+								<div class="col-lg-12">
+
+										<section class="panel">
+												<header class="panel-heading">
+														<h2><strong>Privilidge </strong> Types </h2>
+												</header>
+												<div class="panel-tools fully color" align="right"  data-toolscolor="#6CC3A0">
+														<ul class="tooltip-area">
+																<li><a href="javascript:void(0)" class="btn btn-collapse" title="Collapse"><i class="fa fa-sort-amount-asc"></i></a></li>
+																<li><a href="javascript:void(0)" class="btn btn-reload"  title="Reload"><i class="fa fa-retweet"></i></a></li>
+																<li><a href="javascript:void(0)" class="btn btn-close" title="Close"><i class="fa fa-times"></i></a></li>
+														</ul>
+												</div>
+												<div class="panel-body">
+																<div class="table-responsive">
+																<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped">
+																		<thead>
+																				<tr>
+																								<th>No.</th>
+																								<th>Type</th>
+																								<th>Privilidges</th>
+																								<th width="30%">Action</th>
+																				</tr>
+																		</thead>
+																		<tbody align="center">
+																					<%
+																					var i=1;
+																					for (var key in allTypes) {
+																						if (allTypes.hasOwnProperty(key)) {
+																						 %>
+																						 <tr>
+																							<td><%- i %></td>
+																							<td> <%- allTypes[key].type  %> </td>
+																							<td> <%- allTypes[key].privilidge  %> </td>
+																							<td>
+																								<span class="tooltip-area">
+																								<a href="javascript:void(0)" onclick="edit('<%- allTypes[key].type %>','<%-allTypes[key].privilidge %>','<%-allTypes[key]._id %>')" class="btn btn-default btn-sm" title="Edit"><i class="fa fa-pencil"></i></a>
+																								<a href="/admin/privilidgetype/<%-allTypes[key]._id %>"  class="btn btn-default btn-sm" title="Delete"><i class="fa fa-trash-o"></i></a>
+																								</span>
+																							</td>
+																						 </tr>
+																					<%
+																							}
+																							i++;
+																						}
+																					%>
+																		</tbody>
+																</table>
+																</div>
+												</div>
+										</section>
+								</div>
+						</div>
+						<!-- //content > row-->
+				</div>
+				<!-- //content-->
+		</div>

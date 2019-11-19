@@ -1,0 +1,52 @@
+{
+  "name": "blog-express",
+  "version": "1.0.0",
+  "description": "Example of CASL and express integration",
+  "main": "src/index.js",
+  "dependencies": {
+    "@casl/ability": "^2.0.1",
+    "@casl/mongoose": "2.0.1",
+    "axios": "^0.19.0",
+    "biguint-format": "^1.0.1",
+    "body-parser": "^1.18.3",
+    "connect-mongo": "^2.0.3",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "debug": "~2.6.9",
+    "ejs": "~2.5.7",
+    "ejs-mate": "^3.0.0",
+    "email-templates": "^5.0.3",
+    "express": "^4.16.3",
+    "express-ejs-layouts": "^2.5.0",
+    "express-session": "^1.15.6",
+    "firebase-admin": "^8.3.0",
+    "formidable": "^1.2.1",
+    "gm": "^1.23.1",
+    "html-pdf": "^2.2.0",
+    "http-errors": "^1.6.1",
+    "jsonwebtoken": "^8.4.0",
+    "md5": "^2.2.1",
+    "mongodb": "^3.3.4",
+    "mongoose": "^5.7.11",
+    "morgan": "~1.9.0",
+    "node-cron": "^2.0.3",
+    "nodemailer": "^5.1.1",
+    "passport": "^0.3.2",
+    "passport-jwt": "^4.0.0",
+    "pdfkit": "^0.9.1",
+    "phantomjs-prebuilt": "^2.1.16",
+    "querystring": "^0.2.0",
+    "sharp": "^0.23.2",
+    "shortid": "^2.2.15"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  },
+  "scripts": {
+    "start": "nodemon index",
+    "dev": "nodemon index"
+  },
+  "author": "Sergii Stotskyi <sergiy.stotskiy@freaksidea.com>",
+  "license": "MIT"
+}
