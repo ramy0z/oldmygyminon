@@ -9,21 +9,24 @@ var log = require('./logCrl');
 exports.getUsersPrivilidge = function (req, res, callback, where = null) {
   global.where = where;
   var callback2 = function (obj2, error) {
-    if (typeof obj2[0] != 'undefined') var string1 = obj2[0].privilidge; else var string1 = '';
-    if (!string1) string1 = '';
-
-    for (var group in allPrivilidges) {
-      if (allPrivilidges.hasOwnProperty(group)) {
-        var deletegrop = true;
-        Object.keys(allPrivilidges[group]).forEach(function (key) {
-          deletegrop = false;
-          if (!string1.includes(allPrivilidges[group][key])) delete allPrivilidges[group][key];
-        });
-        if (deletegrop) delete allPrivilidges[group];
-      }
+   
+   // if (typeof obj2[0] != 'undefined') var string1 = obj2[0].privilidge; else var string1 = '';
+    // for (var group in allPrivilidges) {
+    //   if (allPrivilidges.hasOwnProperty(group)) {
+    //     var deletegrop = true;
+    //     Object.keys(allPrivilidges[group]).forEach(function (key) {
+    //       deletegrop = false;
+    //       if (!string1.includes(allPrivilidges[group][key])) delete allPrivilidges[group][key];
+    //     });
+    //     if (deletegrop) delete allPrivilidges[group];
+    //   }
+    // }
+   let privilidge={}
+    if(obj2.length>0){
+      privilidge=JSON.parse(obj2[0].privilidge)
     }
-
-    callback(allPrivilidges, false);
+    console.log(privilidge)
+    callback(privilidge, false);
   }
 
   if (global.where == null) {
@@ -85,8 +88,22 @@ exports.updateUsersPrivilidge = function (req, res, callback) {
         notification.subscribeAndUnscribeToTopicByRolesAndUserID(req, res, privilidge[0].type, privilidge[0]['key'], subscribecallback, false)
       }
       if (req.body.type == '' || req.body.type == 'undefined' || req.body.type == null) req.body.type = '5c5ee0444e44ee1054e26a89';
-      var data = { 'privilidge': req.body.privilidge, 'type': req.body.type };
-      baseModel.update(req, res, usersPrivilidge, { _id: req.params.id }, data, callback1, false, true);
+      if(req.body.privilidge&&req.body.privilidge.length>0)
+      {
+         var privilidge = preparePermission(req.body.privilidge)
+     
+          if (typeof privilidge=='string'&&privilidge.length>0) {
+            var data = { 'privilidge':privilidge, 'type': req.body.type };
+            baseModel.update(req, res, usersPrivilidge, { _id: req.params.id }, data, callback1, false, true);
+         }
+         else {
+           callback(false);
+         }
+       }
+       else {
+         callback(false);
+       }
+      
     }
   }
   baseModel.get(req, res, usersPrivilidge, { _id: req.params.id }, {}, getPrivilidgeCallback)
@@ -157,8 +174,11 @@ exports.addDefalutPrivilidge = function (req, res, parent_key, user_key, callbac
         if (error) callback(obj, error);
         else callback(obj, false);
       }
+      var privilidge = preparePermission(privilidge[0]['privilidge'])
+
       if (units) parent_key = user_key;
-      var data = { parent_key: parent_key, privilidge: privilidge[0].privilidge, key: user_key, 'type': privilidge[0]._id, admin_key: parent_key, status: true }
+      var data = { parent_key: parent_key, privilidge:privilidge, key: req.body.key, 'type':  privilidge[0]._id, admin_key: parent_key, status: true }
+    
       baseModel.add(req, res, usersPrivilidge, data, callback1, true);
     }
   }
@@ -257,8 +277,9 @@ var  allPrivilidges = {
   "Users Mangement": {
     "Get All Users": "getallusers",
     "Invitation": "sendinvitations",
-    "Delete user": "getallusersclub",
+    "Delete user": "deleteuserdata",
     "Update User": "updateuserdata",
+    "Create User":"createuser",
     "Get User": "getuserdata",
     "Setting": "updatesettings"
   },
@@ -279,6 +300,16 @@ var  allPrivilidges = {
     "Edit Membership": "editmembership",
     "Get Membership": "getmembership",
     "Delete Membership": "deletemembership"
+  },
+  "Member Membership": {
+    "Add Member Membership": "addmember_membership",
+    "Edit Member Membership": "editmember_membership",
+    "Get Member Membership": "getmember_membership",
+    "Delete Member Membership": "deletemember_membership",
+    "Upgrade Member Membership":"upgrademember_membership",
+    "Downgrade Member Membership":"downgrademember_membership",
+    "Renew Member Membership":"renewmember_membership",
+    "payment  Member Membership":"paymentmember_membership"
   },
   "Activities": {
     "Add Activities": "addactivities",

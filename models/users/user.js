@@ -44,7 +44,7 @@ var UserSchema = new schema({
 		type: String
 	},
 	status: {
-		type: Boolean,
+		type:schema.Types.Mixed,
 		default:false
 	},
 	createdat: {

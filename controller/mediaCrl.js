@@ -6,7 +6,7 @@ var auth = require('../models/auth/auth');
 const PDFDocument = require('pdfkit');
 
 var formidable = require('formidable');
-var sharp = require('sharp');
+//var sharp = require('sharp');
 const appDir = path.dirname(require.main.filename);
 const exists = (path) => {
   try {
@@ -73,16 +73,16 @@ var resize = function (width, height, image, path, imagename) {
   if (exists(image)) {
     if (!fs.existsSync(path)) fs.mkdirSync(path);
     // pass only width in resize to keep inspect ratio same  
-    sharp(image).resize(width).toFile(path + '/' + imagename, function (err) {
-    });
+    //sharp(image).resize(width).toFile(path + '/' + imagename, function (err) {
+    //});
   }
 }
 const getFileExtension = (filename) => {
   var resize = function (width, height, image, path, imagename) {
     if (exists(image)) {
       if (!fs.existsSync(path + "\\" + width + '×' + height)) fs.mkdirSync(path + "\\" + width + '×' + height);
-      sharp(image).resize(width, height).toFile(path + "\\" + width + '×' + height + '/' + imagename, function (err) {
-      });
+     // sharp(image).resize(width, height).toFile(path + "\\" + width + '×' + height + '/' + imagename, function (err) {
+     // });
     }
   }
   return filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 2);
@@ -136,7 +136,6 @@ exports.upload_multiImages = function (req, res, callback) {
         });
         if(old_image_path != undefined){
           //delete old images if its exsist
-          old_image_path = old_image_path.split(auth.siteurl())[1];
           delete_old_images(old_image_path);
           // Delete the file
         }
@@ -151,6 +150,7 @@ exports.upload_multiImages = function (req, res, callback) {
 }
 var delete_old_images = function (old_image_path) {
   if (old_image_path != undefined) {
+    old_image_path = old_image_path.split(auth.siteurl())[1];
     try {
       var imgsubstr = old_image_path.substring(1, 3);
       if (imgsubstr != 'lg' && imgsubstr != 'md' && imgsubstr != 'sm') {

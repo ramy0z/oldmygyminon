@@ -65,7 +65,7 @@ router.get('/getActivity', function(req, res, next) {
     }
     activities.getActivity(req,res,where,{},handelresult);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'getactivities',true);
 });
 //get activite by id
 router.get('/getActivityById/:id', function(req, res, next) {

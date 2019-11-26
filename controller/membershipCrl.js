@@ -133,10 +133,11 @@ exports.getPackages = function (req, res, where, select, callback) {
         });
         onepackges['discount'] = parseInt(onepackges['discount'])
         onepackges['subtotal'] = calculateDiscount(package['fees'], package['discount'], package['discount_startegy'], package['discount_startegy'], package['start_discount'], package['end_discount']);
-        if (onepackges.image != '') onepackges.image = auth.siteurl() + onepackges.image;
+        if (onepackges.image != '') onepackges.image =  onepackges.image;
         result.push(onepackges);
       });
-      callback(true, result);
+      
+      callback(true, {"result":result , "Url":auth.siteurl()} );
     }
   }
   baseModel.getJoin(req, res, membership, 'membershipandpayments', '_id', 'membership_id', callback1, where, true);
@@ -196,6 +197,7 @@ exports.selectePackage = function (req, res, callback) {
     } else {
       var activitescallback = function (result, activity) {
         if (activity.length) {
+          activity.type='activity'
           selectmemnership(req, res, activity, addactivitycallback);
         } else (callback({}, 'package not valid'));
       }

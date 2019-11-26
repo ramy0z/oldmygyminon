@@ -8,9 +8,9 @@ var options = require('../../controller/optionsCrl');
 var monthtransaction = require('../../controller/monthtransactionCrl');
 
 //site url
-exports.siteurl = function(req,res){ return 'http://192.168.1.2:3000' ;}
+exports.siteurl = function(req,res){ return 'http://localhost:3000' ;}
 //get base url
-exports.baseurl = function(req,res){ return 'http://192.168.1.2:3000/api/v1/' ;}
+exports.baseurl = function(req,res){ return 'http://localhost:3000/api/v1/' ;}
 //check authentication
 exports.Auth = function(req,res,callback,privilidge,token=true){
   if(token) req.ability.throwUnlessCan('read', 'User');
@@ -42,11 +42,11 @@ var checkprivilidge  = function(req,res,keyword,callback){
   else {
  
     var handelprivilidge = function(privilidge,error){
-      console.log('hii',Object.keys(privilidge).length)
+      //console.log('privildge11111111',privilidge)
       if(Object.keys(privilidge).length>0){
-        var result = false;
+        //console.log('privilidge test')
         Object.keys(privilidge).forEach(function(key) {
-          console.log('key & keyword',key,keyword)
+         // console.log('key & keyword',key,keyword)
           if (Object.values(privilidge[key]).indexOf(keyword) > -1) {
              result = true;
           }

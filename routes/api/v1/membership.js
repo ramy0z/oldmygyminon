@@ -43,7 +43,8 @@ router.delete('/deletePackages/:id', function(req, res, next) {
 router.get('/getPackages', function(req, res, next) {
   var exceresult = function (){
     var handelresult = function(result,data){
-      if(result) res.send({result,data} );
+      // / {"result":result , "Url":auth.siteurl()}
+      if(result) res.send({"result":true,data } );
       else res.send( {result,error:data} );
     }
     var where = { $or:[
@@ -89,7 +90,7 @@ router.get('/getPackages', function(req, res, next) {
       }else res.send( {result:false,error:'invalid membership id'} );
     }else membership.getPackages(req,res,where,{},handelresult);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'getmembership',true);
 });
 
 //get all user settings
@@ -113,7 +114,7 @@ router.post('/selectePackage', function(req, res, next) {
     }
     membership.selectePackage(req,res,handelresult);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'addmember_membership',true);
 });
 
 //upgrade membership
@@ -126,7 +127,7 @@ router.post('/upgradePackage', function(req, res, next) {
     }
     membership.upgradeanddowngradePackage(req,res,'upgrade',handelresult);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'upgrademember_membership',true);
 });
 
 //downgrade membership
@@ -137,7 +138,7 @@ router.post('/downgradePackage', function(req, res, next) {
       if(! err) res.send({result:true,data:result});
       else res.send({result:false,error:err});
     }
-    membership.upgradeanddowngradePackage(req,res,'downgrade',handelresult);
+    membership.upgradeanddowngradePackage(req,res,'downgrademember_membership',handelresult);
   }
   auth.Auth(req,res,exceresult,'userbase',true);
 });
@@ -170,7 +171,7 @@ router.get('/getSelectedpackage/:pub_key', function(req, res, next) {
 
     membership.getSelectedpackage(req,res,where,{},handelresult);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'getmember_membership',true);
 });
 
 
@@ -196,7 +197,7 @@ router.get('/getSelectedPackageById/:id', function(req, res, next) {
       membership.getSelectedpackage(req,res,where,{},handelresult);
     }else res.send( {result:false,error:'invalid package'} );
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'getmember_membership',true);
 });
 //update selecte Package
 router.patch('/updateSelectedpackage/:id', function(req, res, next) {
@@ -209,7 +210,7 @@ router.patch('/updateSelectedpackage/:id', function(req, res, next) {
     //modifiy the method
     membership.updateSelectedpackage(req,res,req.body,handelresult);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'editmember_membership',true);
 });
 
 //update selecte Package
@@ -223,7 +224,7 @@ router.patch('/paymentPackage/:id', function(req, res, next) {
     //modifiy the method
     membership.paymentPackage(req,res,req.body,handelresult);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'paymentmember_membership',true);
 });
 
 router.post('/renewmembership/:pub_key', function(req, res, next) {
@@ -236,7 +237,7 @@ router.post('/renewmembership/:pub_key', function(req, res, next) {
     }
     membership.renewmembership(req,res,handelresult);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'renewmember_membership',true);
 }
 else{
   res.send({result:false,data:'invalid data'})

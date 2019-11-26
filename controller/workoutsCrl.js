@@ -55,7 +55,7 @@ exports.getClubWorkouts = function(req,res,callback){
             if (error) callback({result:false,data: "Error While Getting Data!"});
             else {
               const unique = [...new Set(obj.map(item => item.category))];
-                callback( {result : true,  data:{ "workout":obj , "category":unique , "url": auth.siteurl() } } );
+                callback( {result : true,  data:{ "workout":obj , "category":unique } } );
             }
         }, true ,sort);
     }
@@ -84,7 +84,7 @@ exports.getClubWorkoutsGroupedCat = function(req,res,callback){
                   if(typeof(objectGroupedCat[cat])=="undefined")objectGroupedCat[cat]=[];
                   objectGroupedCat[cat].push(element);
               });
-              callback( {result : true,   data:{ "workout":objectGroupedCat , "url": auth.siteurl() }} );
+              callback( {result : true,   data:{ "workout":objectGroupedCat}} );
           }
       }, true ,sort);
   }

@@ -41,6 +41,7 @@ exports.createUser = function (req, res, callback1) {
     units_type: req.body.units_type,
     pri_key: pri_key,
     pub_key: pub_key,
+    status:'Active'
   }
   // call back function after user added
   var callback = function (obj, error) {
@@ -454,10 +455,15 @@ exports.login = function (req, res, callback) {
         data[0].allPrivilidge=JSON.parse(data[0]['allprivilidges'][0].privilidge)
         delete data[0].allprivilidges
        }
+       else
+       {
+        data[0].allPrivilidge={}
+        delete data[0].allprivilidges
+       }
         delete data[0].usermetas;
         data[0].acounts = privilidge;
         data[0].token = accessToken;
-
+        data[0].baseurl=auth.siteurl()
         callback(true, data[0]);
       }
       var club_name = gitusermeta(req, res, 'club_name', allPrivilidge, usermetascallback);
@@ -509,6 +515,7 @@ exports.getBranchData = function (req, res, callback, parent_key = false) {
     if (typeof obj[0] != 'undefined') {
       delete obj[0].password; delete obj[0].pri_key; delete obj[0].createdat; delete obj[0].__v;
       var result = {
+        status:obj[0].status,
         'id': obj[0]._id,
         'name': obj[0].name,
         'email': obj[0].email,
@@ -517,11 +524,15 @@ exports.getBranchData = function (req, res, callback, parent_key = false) {
         'Adress': '',
         'lat': '',
         'lang': '',
-        'brief': ''
+        'brief': '',
+        'city':'',
+        'country':''
       }
       Object.values(obj[0].usermetas).forEach(function (meta) {
         if (meta.key == 'Adress') result['Adress'] = meta.value;
         if (meta.key == 'lat') result['lat'] = meta.value;
+        if (meta.key == 'city') result['city'] = meta.value;               
+        if (meta.key == 'country') result['country'] = meta.value;               
         if (meta.key == 'lang') result['lang'] = meta.value;
         if (meta.key == 'brief') result['brief'] = meta.value;
       });
@@ -538,6 +549,7 @@ exports.getUnitsData = function (req, res, callback, parent_key = false) {
     if (typeof obj[0] != 'undefined') {
       delete obj[0].password; delete obj[0].pri_key; delete obj[0].createdat; delete obj[0].__v;
       var result = {
+        status:obj[0].status,
         'id': obj[0]._id,
         'name': obj[0].name,
         'email': obj[0].email,
@@ -548,11 +560,15 @@ exports.getUnitsData = function (req, res, callback, parent_key = false) {
         'lat': '',
         'lang': '',
         'brief': '',
-        'working_hour': ''
+        'working_hour': '',
+        city:'',
+        country:''
       }
       Object.values(obj[0].usermetas).forEach(function (meta) {
         if (meta.key == 'Adress') result['Adress'] = meta.value;
         if (meta.key == 'lat') result['lat'] = meta.value;
+        if (meta.key == 'city') result['city'] = meta.value;
+        if (meta.key == 'country') result['country'] = meta.value;
         if (meta.key == 'lang') result['lang'] = meta.value;
         if (meta.key == 'brief') result['brief'] = meta.value;
         if (meta.key == 'working_hour') result['working_hour'] = meta.value;
@@ -578,7 +594,7 @@ exports.updateUserData = function (req, res, callback) {
     for (var key in body) {
       var result = new Object();
       if (key == 'username' || key == 'password' || key == 'pub_key' || key == 'email' || key == 'name' || key == 'branch_key'
-        || key == 'club_key' || key == 'units_type' || key == 'gender')
+        || key == 'club_key' || key == 'units_type')
         continue;
       // if(req.body.pub_key) var where = {pub_key:req.body.pub_key,key:key}
       // else var where = {pub_key:req.query.public_key,key:key}
@@ -714,8 +730,8 @@ exports.inviteToClub = function (req, res, callback) {
           }
           var currentDate = Math.round(new Date().getTime() / 1000);
           var createSignature = md5(md5('gyminAppwsds5' + key + req.body.email + currentDate + req.body.user_type + all + '@#!$$#@#$844%^^&(SD'));
-          var link = 'http://'+req.get('host')+'/auth/emailinvitationlink/' + key + '/' + req.body.email + '/' + currentDate + '/' + createSignature + '/' + req.body.user_type + '/' + all;
-          console.log(link);
+          var link = 'http://'+req.get('host')+'/api/v1/customers/emailinvitationlink/' + key + '/' + req.body.email + '/' + currentDate + '/' + createSignature + '/' + req.body.user_type + '/' + all;
+          //console.log(link);
           email.sendemail(req, res, req.body.email, 'Invite To club', 'Please Click ' + link, '', sendEmailCallback);
         } else callback('email send before');
       }
@@ -741,7 +757,7 @@ exports.resendInviteToClub = function (req, res, callback) {
       var currentDate = Math.round(new Date().getTime() / 1000);
       if (obj[0].all == undefined || obj[0].all == '') var all = 'none'; else var all = obj[0].all;
       var createSignature = md5(md5('gyminAppwsds5' + obj[0].from + obj[0].to + currentDate + obj[0].user_type + all + '@#!$$#@#$844%^^&(SD'));
-      var link = 'http://'+req.get('host')+'/auth/emailinvitationlink/' + obj[0].from + '/' + obj[0].to + '/' + currentDate + '/' + createSignature + obj[0].user_type + all;
+      var link = 'http://'+req.get('host')+'/api/v1/customers/emailinvitationlink/' + obj[0].from + '/' + obj[0].to + '/' + currentDate + '/' + createSignature + '/'+obj[0].user_type + '/'+all;
       //console.log(link);
       email.sendemail(req, res, obj[0].to, 'Invite To club', 'Please Click ' + link, '', callback3);
     } else callback('error');
@@ -786,7 +802,11 @@ exports.checkInvitationLink = function (req, res, callback) {
                     email.updateEmail(req, res, emaildata, { status: 'approved' }, callback4);
 
                     //save tranaction
-                    auth.handelTransaction(req, res, req.params.parent_key, 'newSubscribe', 0);
+                    //auth.handelTransaction(req, res, req.params.parent_key, 'newSubscribe', 0);
+                    console.log('fgfgf', result[0]["_id"])
+                    req.query.public_key=req.params.parent_key
+                    req.query.parent_key=req.params.parent_key
+                    log.add(req, res, 'checkInvitationLink', 'usermetas', 'new_subscribe', result[0]["_id"],'' );
 
                     var notificationData = '{"user_key":"' + result[0]["pub_key"] + '","user_type":"' + req.params.user_type + '"}';
                     if (req.params.user_type == 'member') { var title = 'New Member is subscribed'; var body = 'New Member Subscribe' }
@@ -989,7 +1009,7 @@ exports.registerMember = function (req, res, callback) {
 
 //update member data 
 exports.updateMemberData = function (req, res, callback) {
-  if(req.body.image_profile)req.body.image_profile = req.body.image_profile.split(auth.siteurl())[1];
+  if (req.body.image_profile) req.body.image_profile = req.body.image_profile.split(auth.siteurl())[1];
   if (req.body.username || req.body.email) {
     this.checkExistsMail(req, res, (result) => {
       if (result['err'] == true) {
@@ -1002,30 +1022,18 @@ exports.updateMemberData = function (req, res, callback) {
 
       }
       else {
-        this.updateUserData(req, res, (result) => {
-          if (result) {
-            var callbackdata = function (resu) {
-              callback(resu)
-            }
-            updateData(req, res, callbackdata);
-          }
-          else {
-            callback({ 'result': false, 'data': 'Sorry,Data update failed. try again' })
-          }
-        })
+        if (req.body.gender) {
+          baseModel.update(req, res, user, { 'pub_key': req.params.pub_key }, { gender: req.body.gender }, (res) => {
+            updateData(req, res, (resu) => { callback(resu) });
+          });
+        }
+        else { updateData(req, res, (resu) => { callback(resu) }); }
       }
     })
-
   }
-  else {
-    var callbackdata = function (resu) {
-      callback(resu)
-    }
-    updateData(req, res, callbackdata);
-  }
-
-
+  else { updateData(req, res, (resu) => { callback(resu) }); }
 }
+
 var updateData = (req, res, callback) => {
   // console.log(req.body)
   baseModel.get(req, res, userMeta, { pub_key: req.params.pub_key }, {}, (res) => {
@@ -1034,14 +1042,7 @@ var updateData = (req, res, callback) => {
     var sendedData = []
     Object.keys(req.body).forEach(elem => {
       if (elem == 'username' || elem == 'email' || elem == 'password') { }
-      else if(elem=='gender')
-      {
-        baseModel.update(req,res,user,{'pub_key': req.params.pub_key },{gender:req.body[elem]},(res)=>{
-          
-        })
-      }
-      else
-        sendedData.push(elem)
+      else{sendedData.push(elem)}
     })
     res.forEach(elem => {
       key = elem['key']
@@ -1053,36 +1054,97 @@ var updateData = (req, res, callback) => {
     })
     sendedData.forEach(elem => {
       insertedData.push({ 'key': elem, 'value': req.body[elem], 'pub_key': req.params.pub_key })
-
     })
-    //console.log(insertedData)
-    //console.log(updatedData)
-    if (updatedData.length > 0)
+    if (updatedData.length > 0){
       baseModel.updateManyDataInTheSameTime(req, res, userMeta, updatedData, (result) => {
-        if (result['result']['nMatched'] == updatedData.length) {
-        }
-        else {
-          callback({ 'result': false, 'data': 'Sorry,Data update failed. try again' })
-        }
-      })
-    if (sendedData.length > 0) {
-      var callbackInsertedData = function (result) {
-        //console.log(result)
-      }
-      baseModel.insertManyDataInTheSameTime(req, res, userMeta, insertedData, callbackInsertedData)
+        if (result['result']['nMatched'] != updatedData.length) {callback({ 'result': false, 'data': 'Sorry,Data update failed. try again' })}
+        funifinsertdataexsist(req, res,insertedData, (ins_res) => { callback(ins_res) });
+      });
     }
-    var callback1 = function (result) {
-      if (result.length) {
-        callback({ 'result': true, 'data': result })
-      }
-      else {
-        callback({ 'result': false, 'data': 'Sorry,Data update failed. try again' })
-      }
-
+    else{
+      funifinsertdataexsist(req, res,insertedData, (ins_res) => { callback(ins_res) });
     }
-    this.getallmembers(req, res, callback1, { 'pub_key': req.params.pub_key })
   })
 }
+
+var funifinsertdataexsist= (req, res,insertedData ,callback) =>{
+  if (insertedData.length > 0) {
+    baseModel.insertManyDataInTheSameTime(req, res, userMeta, insertedData, (insert_result) => {
+      // final call back
+      this.getallmembers(req, res, (result)=> {
+        if (result.length) {callback({ 'result': true, 'data': result })}
+        else {callback({ 'result': false, 'data': 'Sorry,Data update failed. try again' })}
+      }, { 'pub_key': req.params.pub_key });
+    });
+  }
+  else{
+     // final call back
+     this.getallmembers(req, res, (result)=> {
+      if (result.length) {callback({ 'result': true, 'data': result })}
+      else {callback({ 'result': false, 'data': 'Sorry,Data update failed. try again' })}
+    }, { 'pub_key': req.params.pub_key });
+
+  }
+}
+
+// var updateData = (req, res, callback) => {
+//   // console.log(req.body)
+//   baseModel.get(req, res, userMeta, { pub_key: req.params.pub_key }, {}, (res) => {
+//     var updatedData = []
+//     var insertedData = []
+//     var sendedData = []
+//     Object.keys(req.body).forEach(elem => {
+//       if (elem == 'username' || elem == 'email' || elem == 'password') { }
+//       else if(elem=='gender')
+//       {
+//         baseModel.update(req,res,user,{'pub_key': req.params.pub_key },{gender:req.body[elem]},(res)=>{
+          
+//         })
+//       }
+//       else
+//         sendedData.push(elem)
+//     })
+//     res.forEach(elem => {
+//       key = elem['key']
+//       var index = sendedData.indexOf(key);
+//       if (index != -1)
+//         sendedData.splice(index, 1);
+//       if (req.body[key])
+//         updatedData.push({ 'key': { 'pub_key': req.params.pub_key, 'key': key }, 'value': { 'value': req.body[key] } })
+//     })
+//     sendedData.forEach(elem => {
+//       insertedData.push({ 'key': elem, 'value': req.body[elem], 'pub_key': req.params.pub_key })
+
+//     })
+//     //console.log(insertedData)
+//     //console.log(updatedData)
+//     if (updatedData.length > 0)
+//       baseModel.updateManyDataInTheSameTime(req, res, userMeta, updatedData, (result) => {
+//         if (result['result']['nMatched'] == updatedData.length) {
+//         }
+//         else {
+//           callback({ 'result': false, 'data': 'Sorry,Data update failed. try again' })
+//         }
+//       })
+//     if (sendedData.length > 0) {
+//       var callbackInsertedData = function (result) {
+//         //console.log(result)
+//       }
+//       baseModel.insertManyDataInTheSameTime(req, res, userMeta, insertedData, callbackInsertedData)
+//     }
+//     var callback1 = function (result) {
+//       if (result.length) {
+//         callback({ 'result': true, 'data': result })
+//       }
+//       else {
+//         callback({ 'result': false, 'data': 'Sorry,Data update failed. try again' })
+//       }
+
+//     }
+//     this.getallmembers(req, res, callback1, { 'pub_key': req.params.pub_key })
+//   })
+// }
+
 // var updateWallet=async function (req) {
 //   //console.log(req.params.pub_key)
 //   const session = await userMeta.startSession();

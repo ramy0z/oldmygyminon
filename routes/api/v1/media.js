@@ -1,7 +1,7 @@
 var express = require('express');
 var formidable = require('formidable');
 var fs = require('fs');
-var sharp = require('sharp');
+//var sharp = require('sharp');
 const path = require('path');
 const appDir = path.dirname(require.main.filename);
 var router = express.Router();
@@ -18,16 +18,16 @@ const exists = (path) => {
 var resize = function(width, height,image,path,imagename) {
   if(exists(image)) {
       if (!fs.existsSync(path)) fs.mkdirSync(path);
-      sharp(image).resize(width, height).toFile(path+'/'+imagename, function(err) {
-  });
+     // sharp(image).resize(width, height).toFile(path+'/'+imagename, function(err) {
+ // });
 }
 }
 const getFileExtension = (filename) => {
 var resize = function(width, height,image,path,imagename) {
     if(exists(image)) {
         if (!fs.existsSync(path+"\\"+width+'×'+height)) fs.mkdirSync(path+"\\"+width+'×'+height);
-        sharp(image).resize(width, height).toFile(path+"\\"+width+'×'+height+'/'+imagename, function(err) {
-    });
+        //sharp(image).resize(width, height).toFile(path+"\\"+width+'×'+height+'/'+imagename, function(err) {
+    //});
   }
 }
 return filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 2);

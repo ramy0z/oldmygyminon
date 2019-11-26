@@ -71,10 +71,11 @@ exports.getPackage = function (req, res, where, select, callback) {
         else onepackges.maxCurrentUser = {};
         if (isJson(onepackges.currentUserCalculation)) onepackges.currentUserCalculation = JSON.parse(onepackges.currentUserCalculation);
         //else onepackges.currentUserCalculation = {};
-        if (onepackges.image != '') onepackges.image = auth.siteurl() + onepackges.image;
+        //if (onepackges.image != '') onepackges.image = auth.siteurl() + onepackges.image;
+        if (onepackges.image != '') onepackges.image =  onepackges.image;
         result.push(onepackges);
       });
-      callback(false, result);
+      callback(false, {data :{result , Url:auth.siteurl()}});
     }
   }
   baseModel.get(req, res, membership, where,{},callback1, true);
@@ -91,8 +92,8 @@ exports.updatePackage = function (req, res, callback) {
 }
 
 exports.deletePackage = function (req, res, callback) {
-  if(req.body.image_url){//remove old first
-    mediaCrl.delete_old_images(req.body.image_url); 
+  if(req.body.image){//remove old first
+    mediaCrl.delete_old_images(req.body.image); 
   }
   var callback1 = function (obj, error) {
     if (!obj.n) callback(false);

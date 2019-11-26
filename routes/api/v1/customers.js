@@ -64,7 +64,7 @@ router.get('/getallmembers', function(req, res, next) {
     ],$and:[{'usermetas.value':'member','usermetas.key':'user_type'}]}
     user.getallmembers(req,res,handelresult,where);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'getallusers',true);
 });
 
 router.get('/getmembersbybranch', function(req, res, next) {
@@ -100,7 +100,7 @@ router.get('/getmember/:id', function(req, res, next) {
     user.getallmembers(req,res,handelresult,{pub_key:req.params.id});
 
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'getallusers',true);
 }
 else
 {
@@ -122,7 +122,7 @@ router.get('/getallmembers', function(req, res, next) {
     ],$and:[{'usermetas.value':'member','usermetas.key':'user_type'}]}
     user.getallusers(req,res,handelresult,where);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'getallusers',true);
 });
 //Get Club Branch And Units
 router.get('/getAllBranchAndUnits', function(req, res, next) {
@@ -157,7 +157,7 @@ router.get('/getClubTree', function(req, res, next) {
     }
     user.getClubTree(req,res,handelresult);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'getallusers',true);
 });
 //login
 router.post('/login', function(req, res, next) {
@@ -213,7 +213,7 @@ router.get('/getUserData', function(req, res, next) {
     }
     user.getUserData(req,res,callback);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);//getallusers
+  auth.Auth(req,res,exceresult,'getallusers',true);//getallusers
 });
 //update user data
 router.patch('/updateUserData/:pub_key', function(req, res, next) {
@@ -252,7 +252,7 @@ router.post('/upgradetoclub', function(req, res, next) {
     }
       user.upgradetoclub(req,res,callback);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'createuser',true);
 });
 //Subscribe Club
 router.get('/subscribetoclub/:id', function(req, res, next) {
@@ -263,7 +263,7 @@ router.get('/subscribetoclub/:id', function(req, res, next) {
     }
       user.subscribetoclub(req,res,callback);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'createuser',true);
 });
 //UnSubscribe Club
 router.delete('/unsubscribetoclub/:id', function(req, res, next) {
@@ -278,7 +278,7 @@ router.delete('/unsubscribetoclub/:id', function(req, res, next) {
     }
       user.unsubscribetoclub(req,res,callback);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'deleteuserdata',true);
 });
 
 //UnSubscribe Club
@@ -294,7 +294,7 @@ router.patch('/activeAndDeactiveUser', function(req, res, next) {
     }
       user.activeAndDeactiveUser(req,res,callback);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'deleteuserdata',true);
 });
 //change user account
 router.get('/changeaccount/:id', function(req, res, next) {
@@ -338,7 +338,7 @@ router.post('/addBranch', function(req, res, next) {
     }
     user.checkExistsMail(req,res,callback);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'createuser',true);
 });
 //Add Units
 router.post('/addUnits', function(req, res, next) {
@@ -361,8 +361,9 @@ router.post('/addUnits', function(req, res, next) {
     }
     user.checkExistsMail(req,res,callback);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'createuser',true);
 });
+
 //get Branch data
 router.get('/getBranchData/:branch_key', function(req, res, next) {
   var exceresult = function (){
@@ -372,7 +373,7 @@ router.get('/getBranchData/:branch_key', function(req, res, next) {
     }
     user.getBranchData(req,res,callback);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'getallusers',true);
 });
 //get Units Data
 router.get('/getUnitsData/:units_key', function(req, res, next) {
@@ -383,7 +384,7 @@ router.get('/getUnitsData/:units_key', function(req, res, next) {
     }
     user.getUnitsData(req,res,callback);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'getallusers',true);
 });
 //update Branch data
 router.patch('/updateBranchData/:pub_key', function(req, res, next) {
@@ -402,7 +403,7 @@ router.patch('/updateBranchData/:pub_key', function(req, res, next) {
     if(req.body.email) user.checkExistsMail(req,res,callback,req.params.pub_key);
     else callback({});
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'updateuserdata',true);
 });
 //update Units data
 router.patch('/updateUnitsData/:pub_key', function(req, res, next) {
@@ -421,7 +422,7 @@ router.patch('/updateUnitsData/:pub_key', function(req, res, next) {
     if(req.body.email) user.checkExistsMail(req,res,callback,req.params.pub_key);
     else callback({});
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'updateuserdata',true);
 });
 //delete Branch
 router.delete('/deleteBranch/:pub_key', function(req, res, next) {
@@ -435,7 +436,7 @@ router.delete('/deleteBranch/:pub_key', function(req, res, next) {
     }
     user.deleteUserData(req,res,{$or:[{pub_key:req.params.pub_key},{branch_key:req.params.pub_key}]},callback);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'deleteuserdata',true);
 });
 //delete Units
 router.delete('/deleteUnits/:pub_key', function(req, res, next) {
@@ -449,7 +450,7 @@ router.delete('/deleteUnits/:pub_key', function(req, res, next) {
     }
     user.deleteUserData(req,res,{$or:[{pub_key:req.params.pub_key},{units_key:req.params.pub_key}]},callback);
   }
-  auth.Auth(req,res,exceresult,'userbase',true);
+  auth.Auth(req,res,exceresult,'deleteuserdata',true);
 });
 /**
 *

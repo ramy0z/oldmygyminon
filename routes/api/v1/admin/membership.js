@@ -31,8 +31,9 @@ router.patch('/update/:id', function(req, res, next) {
 router.get('/get', function(req, res, next) {
   var exceresult = function (){
     var handelresult = function(err,result){
-      if(! err) res.send({result:result});
-      else res.send({result:false});
+      const data=result['data'];
+      if(! err) res.send({"result" : true ,"data": data});
+      else res.send({result:false , data : "Error"});
     }
     membershipCrl.getPackage(req,res,{},{},handelresult);
   }
@@ -50,7 +51,7 @@ router.get('/getById/:id', function(req, res, next) {
   auth.Auth(req,res,exceresult,'userbase',true);
 });
 //add membershipCrl
-router.delete('/delete/:id', function(req, res, next) {
+router.post('/delete/:id', function(req, res, next) {
   var exceresult = function (){
     var handelresult = function(result){
       res.send({result:result});
