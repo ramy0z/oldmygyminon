@@ -457,7 +457,7 @@ exports.login = function (req, res, callback) {
         delete data[0].usermetas;
         data[0].acounts = privilidge;
         data[0].token = accessToken;
-
+        data[0].baseurl=auth.siteurl()
         callback(true, data[0]);
       }
       var club_name = gitusermeta(req, res, 'club_name', allPrivilidge, usermetascallback);
