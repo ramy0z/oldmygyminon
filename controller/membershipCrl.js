@@ -133,7 +133,7 @@ exports.getPackages = function (req, res, where, select, callback) {
         });
         onepackges['discount'] = parseInt(onepackges['discount'])
         onepackges['subtotal'] = calculateDiscount(package['fees'], package['discount'], package['discount_startegy'], package['discount_startegy'], package['start_discount'], package['end_discount']);
-        if (onepackges.image != '') onepackges.image = auth.siteurl() + onepackges.image;
+        if (onepackges.image != '') onepackges.image =  onepackges.image;
         result.push(onepackges);
       });
       callback(true, result);
@@ -269,7 +269,7 @@ exports.getSelectedpackage = function (req, res, where, select, callback) {
             onepackges['price'] = package['memberships'][0].fees;
           onepackges['package_status'] = package['memberships'][0].status;
           onepackges['package_type'] = 'package';
-          if (onepackges.image != '') onepackges.image = auth.siteurl() + package['memberships'][0].image;
+          if (onepackges.image != '') onepackges.image =  package['memberships'][0].image;
           onepackges['title'] = package['memberships'][0].title;
           if (req.body.status == 'renew') {
             onepackges['taxs'] = package['memberships'][0].renew_taxs;
@@ -285,13 +285,13 @@ exports.getSelectedpackage = function (req, res, where, select, callback) {
           onepackges['price'] = package['activites'][0].fees;
           onepackges['package_status'] = package['activites'][0].status;
           onepackges['type'] = 'activity';
-          if (onepackges.image != '') onepackges.image = auth.siteurl() + package['activites'][0].image;
+          if (onepackges.image != '') onepackges.image = package['activites'][0].image;
           onepackges['title'] = package['activites'][0].title;
           onepackges['taxs'] = package['activites'][0].taxs;
           onepackges['discriptions'] = package['activites'][0].discriptions;
         }
 
-        if (onepackges.agreement != '') onepackges.agreement = auth.siteurl() + onepackges.agreement;
+        if (onepackges.agreement != '') onepackges.agreement =  onepackges.agreement;
         result.push(onepackges);
       });
       callback(true, result);
