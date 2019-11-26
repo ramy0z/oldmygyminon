@@ -137,7 +137,7 @@ exports.getPackages = function (req, res, where, select, callback) {
         result.push(onepackges);
       });
       
-      callback(true, {"result":result , "Url":auth.siteurl()} );
+      callback(true, {"result":result} );
     }
   }
   baseModel.getJoin(req, res, membership, 'membershipandpayments', '_id', 'membership_id', callback1, where, true);
