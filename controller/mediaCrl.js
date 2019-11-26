@@ -6,7 +6,7 @@ var auth = require('../models/auth/auth');
 const PDFDocument = require('pdfkit');
 
 var formidable = require('formidable');
-//var sharp = require('sharp');
+var sharp = require('sharp');
 const appDir = path.dirname(require.main.filename);
 const exists = (path) => {
   try {
@@ -73,16 +73,16 @@ var resize = function (width, height, image, path, imagename) {
   if (exists(image)) {
     if (!fs.existsSync(path)) fs.mkdirSync(path);
     // pass only width in resize to keep inspect ratio same  
-    //sharp(image).resize(width).toFile(path + '/' + imagename, function (err) {
-    //});
+    sharp(image).resize(width).toFile(path + '/' + imagename, function (err) {
+    });
   }
 }
 const getFileExtension = (filename) => {
   var resize = function (width, height, image, path, imagename) {
     if (exists(image)) {
       if (!fs.existsSync(path + "\\" + width + '×' + height)) fs.mkdirSync(path + "\\" + width + '×' + height);
-     // sharp(image).resize(width, height).toFile(path + "\\" + width + '×' + height + '/' + imagename, function (err) {
-     // });
+     sharp(image).resize(width, height).toFile(path + "\\" + width + '×' + height + '/' + imagename, function (err) {
+     });
     }
   }
   return filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 2);
