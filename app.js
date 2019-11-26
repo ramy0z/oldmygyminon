@@ -94,7 +94,7 @@ module.exports = function createApp() {
  //return mongoose.connect('mongodb://localhost:27017/maindb?authSource=admin',{ useNewUrlParser: true })
  //return mongoose.connect('mongodb://hassan:phpdev2016@mongodb-2399-0.cloudclusters.net:10011/maindb?authSource=admin',{ useNewUrlParser: true })
  //return mongoose.connect('mongodb+srv://hassan:phpdev2016@cluster0-vfijl.mongodb.net/maindb?retryWrites=true&w=majority',{ useNewUrlParser: true })
-return mongoose.connect('mongodb+srv://ramyezz:GzIAaLxL0LCmP5ca@cluster0-2f9lp.mongodb.net/gymindb?retryWrites=true&w=majority',{ useNewUrlParser: true })
+return mongoose.connect('mongodb+srv://ramyezz:GzIAaLxL0LCmP5ca@cluster0-2f9lp.mongodb.net/gymindb?retryWrites=true&w=majority',{ useNewUrlParser: true , useUnifiedTopology: true })
  .then(() => app)
 }
 
