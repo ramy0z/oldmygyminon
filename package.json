@@ -37,7 +37,7 @@
     "pdfkit": "^0.9.1",
     "phantomjs-prebuilt": "^2.1.16",
     "querystring": "^0.2.0",
-    "sharp": "^0.23.2",
+    "sharp": "^0.30.5",
     "shortid": "^2.2.15"
   },
   "devDependencies": {
